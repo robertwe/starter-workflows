@@ -1,21 +1,36 @@
-name: Validate Data
+name: Test
 
 on:
   push:
   pull_request:
 
 jobs:
-  validate-data:
-    runs-on: self-hosted
+  job_a:
+    runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/setup-node@v2
-        with:
-          node-version: "12"
-
-      - name: Validate workflows
+      - name: Execute
         run: |
-          npm ci
-          npx ts-node-script ./index.ts
-        working-directory: ./script/validate-data
+          echo "job_a has been executed"
+
+  job_b:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Execute
+        run: |
+          echo "job_a has been executed"
+
+
+  job_c:
+    runs-on: ubuntu-latest
+    needs: [ job_a, job_b ]
+    if: always()
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Execute
+        run: |
+          echo "job_a has been executed"
